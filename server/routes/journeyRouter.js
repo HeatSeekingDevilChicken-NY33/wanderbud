@@ -2,26 +2,36 @@ const express = require('express');
 const journeyController = require('../controllers/journeyController');
 const router = express.Router();
 
-// Create a journey
-/* router.post('/', journeyController.addJourney, (req, res) => {
-    // code
+// Driver Creates a Journey
+router.post('/create', journeyController.createJourney, journeyController.getJourneyID,
+journeyController.createUserJourney, journeyController.getfirstName, journeyController.getJourney, (req, res) => {
+    res.status(200).json(res.locals.journey);
+}); 
+
+// User searches for a Journey
+router.post('/find', journeyController.getEntry, (req, res) => {
+    res.status(200).json(res.locals.journey);
+});
+
+// Passenger Joins a Journey
+router.post('/join', journeyController.join, journeyController.createUserJourney, (req, res) => {
+    res.status(200).json(res.locals.join);
+});
+
+// Passenger Removes themselves from a journey
+router.delete('/join', journeyController.unjoin, (req, res) => {
+    res.status(200);
+}); 
+
+/* // Update after a journey is completed
+router.patch('/', journeyController.updateEntry, journeyController.getUpdatedJourneyID, 
+journeyController.totalPeople, journeyController.updateUserJourney, (req, res) => {
+    res.status(200).json(res.locals.updated);
 }); */
 
-// Search for a journey
-/* router.get('/', journeyController.getEntry, (req, res) => {
-    // code
-}); */
-  
-// Update after a journey is completed
-// ---- userJourney table: Individual journey cost after completing a journey
-// ---- Journey Table: completed (1) after completing a journey 
-/* router.patch('/:completed', journeyController.updateEntry, (req, res) => {
-    // code
-}); */
-
-// Delete Journey
-/* router.delete('/', journeyController.deleteEntry, (req, res) => {
-    // code
-}); */
+// Driver deletes a Journey
+router.delete('/', journeyController.unjoin, journeyController.deleteEntry, (req, res) => {
+    res.status(200).json(res.locals.delete);
+}); 
 
 module.exports = router;

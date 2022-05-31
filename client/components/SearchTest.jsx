@@ -1,12 +1,16 @@
 //merge dev
 
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchJourney } from '../reducers/journeySlice';
+import { selectUserId } from '../reducers/userSlice';
 import axios from 'axios';
+
 
 const SearchTest = () => {
     //select userID 
+    const user_id = useSelector(selectUserId); 
+    
     const dispatch = useDispatch();
     const [values, setValues] = useState({
         origin: '',
@@ -16,9 +20,7 @@ const SearchTest = () => {
         select: 'create'
     })
 
-    const [option, selectOption] = useState('');
-
-    const [error, setError] = useState('');
+    const [error, setError] = useState(false);
 
     const onSearch = e => {
         const {name, value, checked} = e.target;
@@ -29,7 +31,8 @@ const SearchTest = () => {
             [ name ]: value,
             driver: !checked
         })
-     console.log(values);
+        setError(false)
+    //  console.log(values);
     }
 
     //don't fully understand why select needs to be separated but
@@ -40,13 +43,21 @@ const SearchTest = () => {
             ...values,
             select: selected
         })
-        console.log('select me', selected);
-        console.log('inside select', values)
+        // console.log('select me', selected);
+        // console.log('inside select', values)
     }
 
     const handleSubmit = e => {
         e.preventDefault();
         const { origin, destination, date, driver, select } = values;
+        let driverValue = null;
+        // if (driver === true) {
+        //     driverValue = 1;
+        // } else {
+        //     driverValue = 0;
+        // }
+
+        driverValue = driver === true? 1 : 0;
 
         if (!origin || !destination || !date || !select){
             setError(true);
@@ -63,7 +74,7 @@ const SearchTest = () => {
                             dispatch(fetchJourney(findJourney.data));
                         }
                     } else if (select === "create"){
-                        const createJourney = await axios.post('http://localhost:3000/journey/create', values);
+                        const createJourney = await axios.post('http://localhost:3000/journey/create', {origin, destination, date, driver: driverValue, user_id});
                         console.log('post journey', createJourney.data);
 
                         if(createJourney.data){
@@ -89,12 +100,10 @@ const SearchTest = () => {
         }
   }
 
-
-
   return (
     <div className="searchTest">
         <form className="search-posts" onSubmit={handleSubmit}>
-        <div className="search-inputs">
+            <div className="search-inputs">
                 <label htmlFor="origin" className="search-label">Origin</label>
                 <input
                   id="origin"
@@ -140,7 +149,7 @@ const SearchTest = () => {
                   onChange={onSearch}
                 />
             </div>
-            <div className="search-inputs">
+            <div className="search-select">
                 <select 
                     className="select"
                     value={values.select} 

@@ -33,6 +33,7 @@ const SignupForm = () => {
             ...values,
             [ name ]: value
         })
+        setError(false);
     }
 
     //onsubmit handler for signup form
@@ -49,7 +50,6 @@ const SignupForm = () => {
                 const signup = async () => {
                     try {
                         const sendData = await axios.post('http://localhost:3000/signup/users', values);
-                        console.log(sendData.data);
                         //dispatch addUser to send the data payload with generated id to redux store
 
         
@@ -143,7 +143,7 @@ const SignupForm = () => {
                     <label htmlFor="password" className="signup-label">Password </label>
                     <input 
                         id="password"
-                        type="text" 
+                        type="password" 
                         name="password" 
                         className="signup-input" 
                         placeholder="Choose a password"

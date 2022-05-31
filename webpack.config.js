@@ -11,6 +11,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
+    // publicPath: 'dist'
   },
   devtool: 'eval-source-map',
   mode: 'development',
@@ -25,7 +26,7 @@ module.exports = {
       // match the output path
       directory: path.resolve(__dirname, 'dist'),
       // // match the output 'publicPath'
-      publicPath: '/dist',
+      // publicPath: '/dist',
     },
 
     headers: { 

@@ -75,7 +75,7 @@ const SignupTest = () => {
                     <label htmlFor="password" className="signup-label">Password </label>
                     <input 
                         id="password"
-                        type="text" 
+                        type="password" 
                         name="password" 
                         className="signup-input" 
                         placeholder="Choose a password"

@@ -7,6 +7,8 @@ export const journeySlice = createSlice({
   initialState: {
     count: 0,
     journeys: [],
+    upcomingJourneys: [],
+    completedJourneys: []
   },
 
   //reducer functions
@@ -14,36 +16,47 @@ export const journeySlice = createSlice({
     //GET REQUEST
     fetchJourney: (state, action) => {
       //response is array
-      state.journeys = action.payload;
-      console.log("in dispatcher", state.journeys[0]);
+      state.journeys = [...action.payload];
+      console.log('in dispatcher', state.journeys[0]);
     },
 
-    // addPost: (state, action) => {
-    //   //most recent post
-    //   state.posts[action.payload.id] = action.payload.post
+    userJourney: (state, action) => {
+      state.upcomingJourneys = [...action.payload];
+    },
 
-    // },
     // JOIN POST WILL BE A STRETCH FEATURE
     joinJourney: (state, action) => {
-      // state.posts[action.payload.id].buds.push(action.payload.user)
+        // state.posts[action.payload.id].buds.push(action.payload.user)
+        state.upcomingJourneys.push(action.payload);
     },
 
-    deleteJourney: (state, action) => {
-      const newStateJourneys = state.journeys(
-        (el) => el.id === action.payload.id
-      );
-      state.journeys = newStateJourneys;
+    unjoinJourney: (state, action) => {
+      // state.posts[action.payload.id].buds.push(action.payload.user)
+      const newUpcomingJourneys = state.upcomingJourneys.filter(el => el.journey_id === action.payload)
+      state.upcomingJourneys = newUpcomingJourneys;
+      console.log('Unjoin a journey')
     },
+
+    deleteJourneyDispatch: (state, action) => {
+      const deleteJourneys = state.journeys.filter((el, i) => i != action.payload)
+      state.journeys = deleteJourneys;
+      console.log('Delete a journey', state.journeys[0])
+    }
+
   },
 });
 
-export const { fetchJourney, joinJourney, deleteJourney } =
-  journeySlice.actions;
+})
+
+
+export const { fetchJourney, userJourney, joinJourney, unjoinJourney, deleteJourneyDispatch } = journeySlice.actions
+
 
 //SELECTORS TO INCLUDE
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-export const selectJourney = (state) => state.posts.journeys;
+export const selectJourney = (state) => state.journeys.journeys
+export const selectUpcomingJourneys = (state) => state.journeys.upcomingJourneys
 
 export default journeySlice.reducer;

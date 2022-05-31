@@ -23,7 +23,7 @@ body {
     display: flex;
     flex-flow: row;
 
-    color: $lightBlue;
+    color: $red;
     align-items: center;
     justify-content: space-between;
     border-bottom: 0.1rem solid rgb(234, 234, 234);
@@ -46,11 +46,11 @@ body {
         text-decoration: none;
 
         &:visited{
-            color: $lightBlue;
+            color: $red;
         }
 
         &:hover{
-            color: $red;
+            color: $lightBlue;
         }
     }
 }
@@ -60,8 +60,37 @@ body {
     align-self: center;
 }
 
+.landing-display{
+    margin-top: 40px;
+    margin-bottom: 40px;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
 
+.landing-img-div {
+    margin-bottom: 20px;
+}
 
+.landing-img {
+    border-radius: 2%;
+}
+
+.landing-btn {
+    width: 200px;
+    height: 50px;
+    font-size: 1rem;
+    border: 0.1rem solid $red;
+    border-radius: 0.3rem;
+    background-color: white;
+    color: $red;
+
+    &:hover{
+        background-color: $red;
+        color: white;
+    }
+}
 
 // LOGIN AND SIGNUP FORM STYLING
 
@@ -72,7 +101,6 @@ body {
     align-content: center;
     padding-top: 5rem;
 }
-
 
 .login-display {
     border-radius: 2rem;
@@ -165,6 +193,201 @@ body {
     color: $red;
 }
 
+
+.journey-container {
+    margin-top: 40px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 80px;
+
+}
+
+.journey-display {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.journey-img {
+    display: flex;
+    justify-content: center;
+}
+.journey-png {
+    align-self: center;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+//SEARCH DISPLAY
+.searchTest {
+    // position: relative;
+    // top: -70;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    margin-right: 20px;
+    // width: 500px;
+}
+
+.search-posts{
+    display: flex;
+    justify-content: center;
+    border: 1px solid rgb(200, 199, 199);
+    padding-top: 5px;
+    padding-bottom: 15px;
+    padding-right: 20px;
+
+}
+.search-inputs {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+
+
+.search-inputs > input {
+    margin-top: 2px;
+}
+
+.search-select {
+    margin-top: 18px;
+    align-self: center;
+}
+
+.search-submit {
+    margin-top: 18px;
+    margin-left: 18px;
+}
+
+
+input {
+    font-family: Montserrat;
+}
+
+input#driver.search-input {
+    margin-top: 5px;
+}
+select {
+    font-family: Montserrat;
+}
+
+.search-btn {
+    font-family: Montserrat;
+}
+
+
+//rendered journeys
+.journey-component {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    border: 1px solid rgb(200, 199, 199);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.journey-post {
+    display: flex;
+    justify-content: center;
+}
+
+.journey-logo {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.mainFrame {
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 30rem;
+}
+
+
+.topPart {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.journey-trait-label {
+    font-style: italic;
+    font-weight: 400;
+}
+
+.bottomPart{
+    display: flex;
+    flex-flow: row;
+    // justify-content: space-around;
+ .journey-label{
+     margin-left: 18px;
+     margin-right: 18px;
+ }   
+}
+
+.join-btn {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.deleteButton {
+    width: 70px;
+    height: 25px;
+    border: 0.1rem solid $red;
+    border-radius: 0.3rem;
+    background-color: white;
+    color: $red;
+
+    &:hover{
+        background-color: $red;
+        color: white;
+    }
+}
+
+.joinButton {
+    width: 70px;
+    height: 25px;
+    border: 0.1rem solid $red;
+    border-radius: 0.3rem;
+    background-color: white;
+    color: $red;
+
+    &:hover{
+        background-color: $red;
+        color: white;
+    }
+}
+
+
+//PROFILE 
+.profile{
+    display: flex;
+    flex-flow: column;
+    margin: 40;
+}
+
+.profile-header {
+    color: $gray
+}
+
+.list-h2 {
+    color: $gray;
+    border-bottom: 1px solid rgb(200, 199, 199);
+    line-height: 5px;
+    margin-bottom: 10px;
+}
+
+.userJourney {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid rgb(200, 199, 199);
+    margin: 20 0 20 0;
+}
 
 //FOOTER
 .footer {

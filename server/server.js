@@ -16,8 +16,9 @@ const journeyRouter = require('./routes/journeyRouter');
 
 //server logic
 // Home Directory - Landing Page
+app.use('/journey', journeyRouter);
 app.use('/', userRouter);
-app.use('/posts', journeyRouter);
+
 
 
 //if in production mode, statically serve everything in the build folder on the route '/dist'
