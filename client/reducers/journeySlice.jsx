@@ -8,7 +8,8 @@ export const journeySlice = createSlice({
     count: 0,
     journeys: [],
     upcomingJourneys: [],
-    completedJourneys: []
+    completedJourneys: [],
+    numOfJourneys: 0
   },
   
   //reducer functions
