@@ -10,7 +10,8 @@ export const journeySlice = createSlice({
     upcomingJourneys: [],
     completedJourneys: []
   },
-  
+  /*
+  */
   //reducer functions
   reducers: {
       //GET REQUEST
