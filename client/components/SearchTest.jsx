@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchJourney } from '../reducers/journeySlice';
+import { fetchJourney, userJourney } from '../reducers/journeySlice';
 import { selectUserId } from '../reducers/userSlice';
 import axios from 'axios';
 
@@ -78,7 +78,9 @@ const SearchTest = () => {
                         console.log('post journey', createJourney.data);
 
                         if(createJourney.data){
-                            dispatch(fetchJourney(createJourney.data))
+                            dispatch(fetchJourney(createJourney.data));
+                            dispatch(userJourney(createJourney.data));
+
                         }
                     }
 
