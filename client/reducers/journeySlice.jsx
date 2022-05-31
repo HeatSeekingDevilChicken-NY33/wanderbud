@@ -22,7 +22,8 @@ export const journeySlice = createSlice({
     },
 
     userJourney: (state, action) => {
-      state.upcomingJourneys = [...action.payload];
+      console.log(action.payload);
+      state.upcomingJourneys = [...state.upcomingJourneys, ...action.payload];
     },
 
     // JOIN POST WILL BE A STRETCH FEATURE
