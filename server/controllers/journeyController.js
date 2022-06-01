@@ -1,16 +1,51 @@
 const { request } = require('express');
 const db = require('../../database/dbConnection');
 const { use } = require('../routes/journeyRouter');
+var axios = require('axios')
 
 const journeyController = {};
 
 // Creates a Journey
 // Recieves origin, destination, date, driver, userID from Front End
-journeyController.createJourney = (req, res, next) => {
+journeyController.createJourney = async (req, res, next) => {
+
+    console.log(req.body)
+
     const {origin, destination, date} = req.body;
 
-    // create a instance in journey table: origin, destination, date, distance=0, totalCost=0, completed=0
-    const query = `INSERT INTO "journey" ("origin", "destination", "date") VALUES ('${origin}', '${destination}', '${date}')`
+    // Google Distance Matrix API 
+    const key = 'AIzaSyD6lHYLfci-1H4N83LXpT_ZJo7rCBazqwI'
+    const geoCodeAPIKey = 'AIzaSyDoYYXYx8bweOrgm04hMF7XNAi4EiqN_ho'
+    const originURIComponent = encodeURIComponent(origin);
+    const destinationURIComponent = encodeURIComponent(destination);
+    let googleMatrixData
+    let distance
+    let duration
+    
+    let config = {
+      method: 'get',
+      url: `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${originURIComponent}&destinations=${destinationURIComponent}&units=imperial&key=${key}`,
+      headers: { }
+    };
+
+    // Google Distance Matrix API finds the distance if it is drivable
+    await axios(config)
+    .then(response =>  {
+      // console.log(JSON.stringify(response.data));
+      googleMatrixData = response.data
+    })
+    .catch( ()=>  {
+      console.log('error in Google Distance Matrix API');
+    });
+
+    // distance and duration are in meters and seconds, convert in the front end
+    distance = googleMatrixData.rows[0].elements[0].distance.value;
+    duration = googleMatrixData.rows[0].elements[0].duration.text;
+    console.log(duration, distance, 'duration and distance')
+    // Ask Nevruz what the cost calculation is
+    let cost = distance/.1072
+
+    const query = `INSERT INTO "journey" ("origin", "destination", "date", "distance", "duration") VALUES ('${origin}', '${destination}', '${date}', '${distance}','${duration})`
     db.query(query)
     .then(res => {
         return next();
@@ -18,7 +53,60 @@ journeyController.createJourney = (req, res, next) => {
     .catch(err => {
         console.log("Error creating Journey...");
     })
-}
+    }
+
+    // console.log(googleMatrixData.rows[0].elements[0].status, 'this is googleMatrixData')
+    // console.log(googleMatrixData, 'yo')
+    // THIS IS FOR INTERNATIONAL CALCS, INCOMPLETE
+    // If the distance is not drivable, we will find the distance by finding the logitude and latitude and performing a calculation
+    // if (googleMatrixData.rows[0].elements[0].status === 'ZERO_RESULTS') {
+      //   console.log('hi this hits zero results')
+      
+    //   let config2 = {
+    //     method: 'get',
+    //     url: `https://maps.googleapis.com/maps/api/geocode/json?address=${originURIComponent}&key=${geoCodeAPIKey}`,
+    //     headers: { }
+    //   };
+
+    //   await axios(config2)
+    //   .then(response =>  {
+    //     // console.log(response.data.results[0].geometry.location, 'origin data');
+    //     // coordinates of origin
+    //     originUnits = response.data.results[0].geometry.location;
+    //   })
+    //   .catch( ()=>  {
+    //     console.log('error in geoCodeAPI, origin');
+    //   });
+
+    //   let config3 = {
+    //     method: 'get',
+    //     url: `https://maps.googleapis.com/maps/api/geocode/json?address=${destinationURIComponent}&key=${geoCodeAPIKey}`,
+    //     headers: { }
+    //   };
+
+    //   await axios(config3)
+    //   .then(response =>  {
+    //     // desintationUnits = response.data
+    //     destinationUnits = response.data.results[0].geometry.location;
+    //   })
+    //   .catch( ()=>  {
+    //     console.log('error in geoCodeAPI, destination');
+    //   });
+
+    //   console.log(originUnits, destinationUnits)
+    //   distance = Math.pow(Math.pow(originUnits.lat-destinationUnits.lat,2)+Math.pow(originUnits.lng-destinationUnits.lng,2),.5)
+
+    //   console.log(distance, 'distance equation distance')
+
+
+    // }
+
+    // else {
+    //   distance = googleMatrixData.rows[0].elements[0].distance.value;
+    //   console.log(distance, 'this is distance')
+    // }
+
+    // create a instance in journey table: origin, destination, date, distance=0, totalCost=0, completed=0
 
 // Get JourneyID of journey just created
 journeyController.getJourneyID = (req, res, next) => {
@@ -102,7 +190,7 @@ journeyController.getJourney = (req, res, next) => {
             foundJourney = await response.rows;
             let creator = {user_id:user_id, firstName:res.locals.firstN}
             let journey = {'journey_id':foundJourney[0].id, 'origin':foundJourney[0].origin, 'destination':foundJourney[0].destination, 
-            'date':foundJourney[0].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[0].distance}
+            'date':foundJourney[0].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[0].distance, 'duration':foundJouney[0].duration}
             let result = [journey]
             res.locals.journey = result
             return next();
@@ -138,9 +226,10 @@ journeyController.getEntry = (req, res, next) => {
             for (let i = 0; i < foundJourney.length; i++) {
                 let creator = {user_id:foundJourney[i].userID, firstName:foundJourney[i].firstName}
                 let journey = {'journey_id':foundJourney[i].id, 'origin':foundJourney[i].origin, 'destination':foundJourney[i].destination, 
-                'date':foundJourney[i].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[i].distance}
+                'date':foundJourney[i].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[i].distance, 'duration': foundJourney[i].duration}
                 result.push(journey)
             }
+            console.log(result)
             res.locals.journey = result;
             return next();
         }

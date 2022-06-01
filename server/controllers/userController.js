@@ -88,10 +88,11 @@ userController.userJourneys = (req, res, next) => {
 
     async function userJourneys() {
         try {
-                const response = await db.query(`SELECT j."id", j."origin", j."destination", j."date" FROM "userJourney" uj
+                const response = await db.query(`SELECT j."id", j."origin", j."destination", j."date", j."distance", j."duration" FROM "userJourney" uj
                 LEFT JOIN "journey" j ON j."id"="journeyID"
                 WHERE uj."userID"=${userID}`);
                 const journeys = await response.rows;
+                console.log(journeys, "this is journeys")
                 res.locals.allJourneys = journeys
                 return next();
             }
