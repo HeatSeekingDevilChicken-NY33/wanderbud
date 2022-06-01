@@ -12,7 +12,7 @@ const Journey = ({journey, index}) => {
     const dispatch = useDispatch();
     const user_id = useSelector(selectUserId);
 
-    const { origin, destination, date, creator, distance, cost, journey_id} = journey;
+    const { origin, destination, date, creator, distance, cost, journey_id, completed} = journey;
     const { firstName } = creator;
     
 
@@ -22,6 +22,7 @@ const Journey = ({journey, index}) => {
     }
 
     console.log('joinObj', joinObj);
+    console.log('JOURNEY STATUS:' ,completed );
 
 
     const handleDelete = (e) => {
@@ -123,8 +124,9 @@ const Journey = ({journey, index}) => {
                         <p className="journey-trait-label" >Date:</p>
                         <p className="journey-trait" >{date}</p>
                     </div>
+                    {/* NEV: Another conditional added here to check completion status, so there is no join button for the past journeys anymore */}
                     <div className="join-btn">
-                        {creator.user_id === user_id? <button className="deleteButton" onClick={handleDelete}>X</button>: <button className="joinButton" onClick={handleClick}>{toggle? "Join" : "Unjoin"}</button>}
+                        {creator.user_id === user_id? <button className="deleteButton" onClick={handleDelete}>X</button> : completed=== "0" ? <button className="joinButton" onClick={handleClick}>{toggle? "Join" : "Unjoin"}</button> : <p></p> }
                     </div>
                 
 
@@ -134,6 +136,11 @@ const Journey = ({journey, index}) => {
                     <div className="journey-label">
                         <p className="journey-trait-label" >Posted by:</p>
                         <p className="journey-trait" >{firstName}</p>
+                    </div>
+
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >Journey Status:</p>
+                        {completed === "1" ? <p className="journey-trait" >Completed</p> : <p className="journey-trait" >Upcoming</p> }
                     </div>
 
                     {/* <div className="journey-label">

@@ -7,9 +7,9 @@ router.post('/create', journeyController.createJourney, journeyController.getJou
 journeyController.createUserJourney, journeyController.getfirstName, journeyController.getJourney, (req, res) => {
     res.status(200).json(res.locals.journey);
 }); 
-
+// NEV: BEFORE GETTIN DATA FROM DB, "UpdateEntry" will make update in DB for completion status
 // User searches for a Journey
-router.post('/find', journeyController.getEntry, (req, res) => {
+router.post('/find', journeyController.updateEntry,journeyController.getEntry, (req, res) => {
     res.status(200).json(res.locals.journey);
 });
 
