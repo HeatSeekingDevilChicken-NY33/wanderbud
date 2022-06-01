@@ -303,7 +303,7 @@ select {
 
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 30rem;
+    width: 50rem;
 }
 
 
@@ -312,6 +312,7 @@ select {
     flex-flow: row;
     justify-content: space-around;
     align-items: center;
+    flex: 1 0 17%;
 }
 
 .journey-trait-label {
@@ -322,6 +323,7 @@ select {
 .bottomPart{
     display: flex;
     flex-flow: row;
+    flex: 1 0 17%;
     // justify-content: space-around;
  .journey-label{
      margin-left: 18px;

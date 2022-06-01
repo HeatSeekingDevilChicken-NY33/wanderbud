@@ -12,7 +12,7 @@ const Journey = ({journey, index}) => {
     const dispatch = useDispatch();
     const user_id = useSelector(selectUserId);
 
-    const { origin, destination, date, creator, distance, cost, journey_id, completed} = journey;
+    const { origin, destination, date, creator, distance, journey_id, completed, duration, totalCost} = journey;
     const { firstName } = creator;
     
 
@@ -143,6 +143,20 @@ const Journey = ({journey, index}) => {
                         {completed === "1" ? <p className="journey-trait" >Completed</p> : <p className="journey-trait" >Upcoming</p> }
                     </div>
 
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >Distance in KM</p>
+                        <p className="journey-trait" >{distance}</p>
+                    </div>
+
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >Duration in hrs:</p>
+                        <p className="journey-trait" >{duration}</p>
+                    </div>
+
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >Cost per:</p>
+                        <p className="journey-trait" >{totalCost}</p>
+                    </div>
                     {/* <div className="journey-label">
                         <p className="journey-trait-label" >Distance:</p>
                         <p className="journey-trait" >{distance}</p>

@@ -9,7 +9,7 @@ const journeyController = {};
 // Recieves origin, destination, date, driver, userID from Front End
 journeyController.createJourney = async (req, res, next) => {
 
-    console.log(req.body)
+    console.log(req.body, "I am in create Journey")
 
     const {origin, destination, date} = req.body;
 
@@ -38,14 +38,15 @@ journeyController.createJourney = async (req, res, next) => {
       console.log('error in Google Distance Matrix API');
     });
 
+    console.log()
     // distance and duration are in meters and seconds, convert in the front end
-    distance = googleMatrixData.rows[0].elements[0].distance.value;
-    duration = googleMatrixData.rows[0].elements[0].duration.text;
+    distance = parseInt((googleMatrixData.rows[0].elements[0].distance.value)/1000);
+    duration = Math.floor(parseInt(googleMatrixData.rows[0].elements[0].duration.value)/3600);
     console.log(duration, distance, 'duration and distance')
     // Ask Nevruz what the cost calculation is
-    let cost = distance/.1072
+    let totalCost = Math.floor(distance*0.20);
 
-    const query = `INSERT INTO "journey" ("origin", "destination", "date", "distance", "duration") VALUES ('${origin}', '${destination}', '${date}', '${distance}','${duration})`
+    const query = `INSERT INTO "journey" ("origin", "destination", "date", "distance", "duration", "totalCost") VALUES ('${origin}', '${destination}', '${date}', ${distance},${duration}, ${totalCost})`
     db.query(query)
     .then(res => {
         return next();
@@ -189,9 +190,21 @@ journeyController.getJourney = (req, res, next) => {
             const response = await db.query(`SELECT * FROM "journey" WHERE "origin"='${origin}' AND "destination"='${destination}' AND "date"='${date}'`)
             foundJourney = await response.rows;
             let creator = {user_id:user_id, firstName:res.locals.firstN}
-            let journey = {'journey_id':foundJourney[0].id, 'origin':foundJourney[0].origin, 'destination':foundJourney[0].destination, 
-            'date':foundJourney[0].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[0].distance, 'duration':foundJouney[0].duration}
+            console.log(foundJourney[0].duration, "DURATION")
+            console.log(foundJourney[0].totalCost, "TOTAL COST")
+            let journey = {
+              'journey_id':foundJourney[0].id,
+              'origin':foundJourney[0].origin,
+              'destination':foundJourney[0].destination, 
+              'date':foundJourney[0].date.toString().slice(0, 10),
+              'creator':creator,
+              'distance':foundJourney[0].distance,
+              'duration':foundJourney[0].duration,
+              'totalCost':foundJourney[0].totalCost
+            }
+            console.log([journey], 'awwww its journey')
             let result = [journey]
+            console.log(result, 'ITs RESULT!!!!!!');
             res.locals.journey = result
             return next();
         }
@@ -228,10 +241,10 @@ journeyController.getEntry = (req, res, next) => {
 
                     let creator = {user_id:foundJourney[i].userID, firstName:foundJourney[i].firstName}
                     let journey = {'journey_id':foundJourney[i].id, 'origin':foundJourney[i].origin, 'destination':foundJourney[i].destination, 
-                    'date':foundJourney[i].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[i].distance, 'duration':foundJouney[i].duration, 'completed':foundJourney[i].completed }
+                    'date':foundJourney[i].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[i].distance, 'duration':foundJourney[i].duration, 'totalCost':foundJourney[i].totalCost, 'completed':foundJourney[i].completed }
                     result.push(journey)
 
-                
+                    // 'duration':foundJourney[i].duration, 
             }
             console.log(result)
             res.locals.journey = result;

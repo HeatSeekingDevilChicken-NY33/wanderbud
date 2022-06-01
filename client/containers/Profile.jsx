@@ -16,7 +16,7 @@ const Profile = () => {
 
     console.log('allJourneys', allJourneys);
     const userJourneys = allJourneys.sort(el=> el.date).map(el => {
-        const { origin, destination, date, completed } = el;
+        const { origin, destination, date, completed, distance } = el;
         return (
             <div className="userJourney" key={uuidv4()}>
                  <div className="journey-logo">
@@ -42,6 +42,11 @@ const Profile = () => {
                     <div className="journey-label">
                         <p className="journey-trait-label" >Journey Status:</p>
                         {completed === "1" ? <p className="journey-trait" >Completed</p> : <p className="journey-trait" >Upcoming</p> }
+                    </div>
+                    {/* Additional Feature, distance from API will be added to the profile page here  */}
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >Distance in KM:</p>
+                        <p className="journey-trait" >{distance}</p>
                     </div>
                 
                 </div>
