@@ -11,6 +11,7 @@ userController.signupUser = (req, res, next) => {
 
     // Check For Any Missing Fields
     const {firstName, lastName, age, email, password} = req.body;
+    console.log(req.body);
     if (!firstName || !lastName || !age || !email || !password) {
         // res.status(400);
         // res.json({}); to send back to front end?
@@ -82,24 +83,22 @@ userController.loginUser = (req, res, next) => {
 }
 
 //gets all of user's journeys
-userController.userJourneys = (req, res, next) => {
+userController.userJourneys = async (req, res, next) => {
     const userID = res.locals.userData.id;
     console.log("User ID: ",userID)
-
-    async function userJourneys() {
-        try {
-                const response = await db.query(`SELECT j."id", j."origin", j."destination", j."date" FROM "userJourney" uj
-                LEFT JOIN "journey" j ON j."id"="journeyID"
-                WHERE uj."userID"=${userID}`);
-                const journeys = await response.rows;
-                res.locals.allJourneys = journeys
-                return next();
-            }
-            catch(err) {
-                console.log("Error fetching journeys...");
-            }
-        }
-        userJourneys();
+    try {
+        const response = await db.query(
+            `SELECT j."id", j."origin", j."destination", j."date" FROM "userJourney" uj
+            LEFT JOIN "journey" j ON j."id"="journeyID"
+            WHERE uj."userID"=${userID}`
+        );
+        const journeys = response.rows;
+        res.locals.allJourneys = journeys
+        return next();
+    }
+    catch(err) {
+        return next(err);
+    }
 }
 
 module.exports = userController;

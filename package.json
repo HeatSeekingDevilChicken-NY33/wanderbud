@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "jest": {
+    "testTimeout": 5000
+  },
   "scripts": {
     "start": "webpack-dev-server --mode=development --open --hot",
     "build": "webpack",
     "server-only": "nodemon ./server/server.js",
     "test-server": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot\" \"nodemon ./server/test-server.js\"",
     "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot\" \"nodemon ./server/server.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev-test": "concurrently \"export NODE_ENV=\"test\"\" \"webpack-dev-server --open --hot\" \"nodemon ./server/server.js\"",
+    "test": "cross-env NODE_ENV=test jest --verbose"
   },
   "repository": {
     "type": "git",
@@ -28,10 +32,12 @@
   "homepage": "https://github.com/Wanderbud/wanderbud#readme",
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
+    "@testing-library/jest-dom": "^5.16.4",
     "axios": "^0.27.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "jest-environment-jsdom": "^28.1.0",
     "mapbox-gl": "^2.8.2",
     "mapbox-gl-controls": "^2.3.5",
     "mongoose": "^6.3.4",
@@ -59,11 +65,16 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
+    "jest": "^28.1.0",
+    "jest-puppeteer": "^6.1.0",
     "nodemon": "^2.0.16",
+    "puppeteer": "^14.1.2",
+    "react-test-renderer": "^18.1.0",
     "rimraf": "^3.0.2",
     "sass": "^1.52.1",
     "sass-loader": "^13.0.0",
     "style-loader": "^3.3.1",
+    "supertest": "^6.2.3",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.9.0"

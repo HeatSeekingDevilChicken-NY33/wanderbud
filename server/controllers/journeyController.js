@@ -2,6 +2,8 @@ const { request } = require('express');
 const db = require('../../database/dbConnection');
 const { use } = require('../routes/journeyRouter');
 
+
+
 const journeyController = {};
 
 // Creates a Journey
@@ -94,7 +96,7 @@ journeyController.getfirstName = (req, res, next) => {
 // journeyID, origin, destination, date, creatorObject {userID, firstName}, distance
 journeyController.getJourney = (req, res, next) => {
     const {origin, destination, date, user_id} = req.body;
-    console.log("First Name here too!",res.locals.firstN)
+    // console.log("First Name here too!",res.locals.firstN)
     
     async function getJourney() {
         try {
@@ -119,7 +121,7 @@ journeyController.getJourney = (req, res, next) => {
 // array of objects, each object includes: journeyID, origin, destination, date, distance
 journeyController.getEntry = (req, res, next) => {
     const {origin, destination, date} = req.body;
-    console.log('request items', origin)
+    // console.log('request items', origin)
     async function getJourney() {
         try {
             const response = await db.query(`
@@ -156,7 +158,7 @@ journeyController.getEntry = (req, res, next) => {
 journeyController.join = (req, res, next) => {
 
     const {userID, journeyID} = req.body;
-    console.log(req.body)
+    // console.log(req.body)
     async function userJourney() {
         try {
                 const response = await db.query(`SELECT * FROM "journey" WHERE "id"=${journeyID}`);
@@ -177,7 +179,8 @@ journeyController.join = (req, res, next) => {
 // remove passenger/driver from userJourney with journeyID and userID
 journeyController.unjoin = (req, res, next) => {
     const {userID, journeyID} = req.body.joinObj;
-    console.log(req.body.joinObj)
+    // const {userID, journeyID} = req.query;
+    // console.log(req.query);
 
     let query = `DELETE FROM "userJourney" WHERE "userID"=${userID} AND "journeyID"=${journeyID}`
     db.query(query)
@@ -192,7 +195,7 @@ journeyController.unjoin = (req, res, next) => {
 // deletes journey that driver created
 journeyController.deleteEntry = (req, res, next) => {
     const {journeyID} = req.body.joinObj;
-    console.log(journeyID);
+    // console.log(journeyID);
 
     let query = `DELETE FROM "journey" WHERE "id"=${journeyID}`
     db.query(query)

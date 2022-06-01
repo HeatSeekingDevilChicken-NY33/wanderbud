@@ -25,6 +25,7 @@ const SearchTest = () => {
     const onSearch = e => {
         const {name, value, checked} = e.target;
         //  console.log('onSearch', e.target.checked)
+        console.log(value);
 
         setValues({
             ...values,
