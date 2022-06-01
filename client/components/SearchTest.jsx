@@ -1,4 +1,5 @@
 //merge dev
+// new comment
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -81,9 +82,9 @@ const SearchTest = () => {
                         console.log('post journey', createJourney.data);
 
                         if(createJourney.data){
+
                             dispatch(fetchJourney(createJourney.data));
                             dispatch(userJourney(createJourney.data));
-
                         }
                     }
 
