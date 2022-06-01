@@ -56,59 +56,6 @@ journeyController.createJourney = async (req, res, next) => {
     })
     }
 
-    // console.log(googleMatrixData.rows[0].elements[0].status, 'this is googleMatrixData')
-    // console.log(googleMatrixData, 'yo')
-    // THIS IS FOR INTERNATIONAL CALCS, INCOMPLETE
-    // If the distance is not drivable, we will find the distance by finding the logitude and latitude and performing a calculation
-    // if (googleMatrixData.rows[0].elements[0].status === 'ZERO_RESULTS') {
-      //   console.log('hi this hits zero results')
-      
-    //   let config2 = {
-    //     method: 'get',
-    //     url: `https://maps.googleapis.com/maps/api/geocode/json?address=${originURIComponent}&key=${geoCodeAPIKey}`,
-    //     headers: { }
-    //   };
-
-    //   await axios(config2)
-    //   .then(response =>  {
-    //     // console.log(response.data.results[0].geometry.location, 'origin data');
-    //     // coordinates of origin
-    //     originUnits = response.data.results[0].geometry.location;
-    //   })
-    //   .catch( ()=>  {
-    //     console.log('error in geoCodeAPI, origin');
-    //   });
-
-    //   let config3 = {
-    //     method: 'get',
-    //     url: `https://maps.googleapis.com/maps/api/geocode/json?address=${destinationURIComponent}&key=${geoCodeAPIKey}`,
-    //     headers: { }
-    //   };
-
-    //   await axios(config3)
-    //   .then(response =>  {
-    //     // desintationUnits = response.data
-    //     destinationUnits = response.data.results[0].geometry.location;
-    //   })
-    //   .catch( ()=>  {
-    //     console.log('error in geoCodeAPI, destination');
-    //   });
-
-    //   console.log(originUnits, destinationUnits)
-    //   distance = Math.pow(Math.pow(originUnits.lat-destinationUnits.lat,2)+Math.pow(originUnits.lng-destinationUnits.lng,2),.5)
-
-    //   console.log(distance, 'distance equation distance')
-
-
-    // }
-
-    // else {
-    //   distance = googleMatrixData.rows[0].elements[0].distance.value;
-    //   console.log(distance, 'this is distance')
-    // }
-
-    // create a instance in journey table: origin, destination, date, distance=0, totalCost=0, completed=0
-
 // Get JourneyID of journey just created
 journeyController.getJourneyID = (req, res, next) => {
     const {origin, destination, date} = req.body;
@@ -267,6 +214,7 @@ journeyController.join = (req, res, next) => {
         try {
                 const response = await db.query(`SELECT * FROM "journey" WHERE "id"=${journeyID}`);
                 const joinedJourney = await response.rows[0];
+                console.log(response, 'we are in journeyController');
                 res.locals.sendUserID = userID;
                 res.locals.journeyID = journeyID;
                 res.locals.join = {...joinedJourney, date: joinedJourney.date.toString().slice(0, 10)}

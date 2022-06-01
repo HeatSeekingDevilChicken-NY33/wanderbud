@@ -22,7 +22,6 @@ const Journey = ({journey, index}) => {
     }
 
     console.log('joinObj', joinObj);
-    console.log('JOURNEY STATUS:' ,completed );
 
 
     const handleDelete = (e) => {
@@ -57,7 +56,7 @@ const Journey = ({journey, index}) => {
             const join = async () => {
                 try {
                     const joinData = await axios.post('http://localhost:3000/journey/join', joinObj);
-                    console.log('joinData', joinData.data);
+                    console.log('joinData', joinData);
                     //dispatch addUser to send the data payload with generated id to redux store
 
     
@@ -124,6 +123,11 @@ const Journey = ({journey, index}) => {
                         <p className="journey-trait-label" >Date:</p>
                         <p className="journey-trait" >{date}</p>
                     </div>
+
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >Journey Status:</p>
+                        {completed === "1" ? <p className="journey-trait" >Completed</p> : <p className="journey-trait" >Upcoming</p> }
+                    </div>
                     {/* NEV: Another conditional added here to check completion status, so there is no join button for the past journeys anymore */}
                     <div className="join-btn">
                         {creator.user_id === user_id? <button className="deleteButton" onClick={handleDelete}>X</button> : completed=== "0" ? <button className="joinButton" onClick={handleClick}>{toggle? "Join" : "Unjoin"}</button> : <p></p> }
@@ -139,11 +143,6 @@ const Journey = ({journey, index}) => {
                     </div>
 
                     <div className="journey-label">
-                        <p className="journey-trait-label" >Journey Status:</p>
-                        {completed === "1" ? <p className="journey-trait" >Completed</p> : <p className="journey-trait" >Upcoming</p> }
-                    </div>
-
-                    <div className="journey-label">
                         <p className="journey-trait-label" >Distance in KM</p>
                         <p className="journey-trait" >{distance}</p>
                     </div>
@@ -154,7 +153,7 @@ const Journey = ({journey, index}) => {
                     </div>
 
                     <div className="journey-label">
-                        <p className="journey-trait-label" >Cost per:</p>
+                        <p className="journey-trait-label" >Cost per trip $:</p>
                         <p className="journey-trait" >{totalCost}</p>
                     </div>
                     {/* <div className="journey-label">
