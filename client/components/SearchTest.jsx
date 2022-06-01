@@ -25,7 +25,7 @@ const SearchTest = () => {
 
     const onSearch = e => {
         const {name, value, checked} = e.target;
-        //  console.log('onSearch', e.target.checked)
+         console.log('onSearch', e.target.checked)
 
         setValues({
             ...values,
@@ -68,10 +68,13 @@ const SearchTest = () => {
                 try {
                     if (select === "find"){
                         (console.log('inside find', {origin, destination, date}))
+                        // It should be a get request, why is it post?
                         const findJourney = await axios.post('http://localhost:3000/journey/find', {origin, destination, date})
                         console.log(findJourney.data);
 
                         if(findJourney.data){
+                            // findJourneydata doesnt include journey status, check backend
+                            // getEntry from backend is revised, now sending completion status as 0 or 1 
                             dispatch(fetchJourney(findJourney.data));
                         }
                     } else if (select === "create"){
@@ -79,7 +82,8 @@ const SearchTest = () => {
                         console.log('post journey', createJourney.data);
 
                         if(createJourney.data){
-                            dispatch(fetchJourney(createJourney.data))
+
+                            dispatch(fetchJourney(createJourney.data));
                             dispatch(userJourney(createJourney.data));
                         }
                     }

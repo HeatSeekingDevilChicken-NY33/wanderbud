@@ -88,7 +88,8 @@ userController.userJourneys = (req, res, next) => {
 
     async function userJourneys() {
         try {
-                const response = await db.query(`SELECT j."id", j."origin", j."destination", j."date", j."distance", j."duration" FROM "userJourney" uj
+            // NEV: To show journey status in profile, we should send "completed" status to the frontend which will be stored in States, upcomingjourneys
+                const response = await db.query(`SELECT j."id", j."origin", j."destination", j."date", j."completed", j."duration" FROM "userJourney" uj
                 LEFT JOIN "journey" j ON j."id"="journeyID"
                 WHERE uj."userID"=${userID}`);
                 const journeys = await response.rows;

@@ -221,13 +221,17 @@ journeyController.getEntry = (req, res, next) => {
             WHERE A."origin"='${origin}' and A."destination"='${destination}' and A."date"='${date}'`);
 
             foundJourney = await response.rows;
-
+            // Completion status should be sent in the response body
             let result = [];
             for (let i = 0; i < foundJourney.length; i++) {
-                let creator = {user_id:foundJourney[i].userID, firstName:foundJourney[i].firstName}
-                let journey = {'journey_id':foundJourney[i].id, 'origin':foundJourney[i].origin, 'destination':foundJourney[i].destination, 
-                'date':foundJourney[i].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[i].distance, 'duration': foundJourney[i].duration}
-                result.push(journey)
+                // NEV: Backend will send "completed" too as 0 or 1, frontend will revise the journey status
+
+                    let creator = {user_id:foundJourney[i].userID, firstName:foundJourney[i].firstName}
+                    let journey = {'journey_id':foundJourney[i].id, 'origin':foundJourney[i].origin, 'destination':foundJourney[i].destination, 
+                    'date':foundJourney[i].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[i].distance, 'duration':foundJouney[i].duration, 'completed':foundJourney[i].completed }
+                    result.push(journey)
+
+                
             }
             console.log(result)
             res.locals.journey = result;
@@ -292,14 +296,19 @@ journeyController.deleteEntry = (req, res, next) => {
         console.log("Error can't delete journey..");
     }) 
 }
+ // NEV: This part is revised, based on date, it will update the completion status of journeys. 
 
-/* // Update after a journey is completed
+ // Update after a journey is completed
 // NEED TO calculate distance, calculate totalCost after completing a journey
 journeyController.updateEntry = (req, res, next) => {
     const {origin, destination, date} = req.body
-    let query = `UPDATE Journey
-    SET "distance" = 50, "totalCost" = 600, "completed"='1'
-    WHERE "origin"='${origin}' AND "destination"='${destination}' AND "date"='${date}';`
+    // let query = `UPDATE Journey
+    // SET "distance" = 50, "totalCost" = 600, "completed"='1'
+    // WHERE "origin"='${origin}' AND "destination"='${destination}' AND "date"='${date}';`
+    console.log('JOURNEY STATUS IS UPDATED!')
+    let query = `UPDATE JOURNEY
+    SET "completed" = '1'
+    WHERE "date"<'${formatDate(new Date().toString().slice(0, 10))}'`
     db.query(query)
     .then(res => {
         return next();
@@ -308,7 +317,7 @@ journeyController.updateEntry = (req, res, next) => {
         console.log("Error updating Journey...");
     })
 }
-
+/*
 //Select journey id 
 journeyController.getUpdatedJourneyID = (req, res, next) => {
     const {origin, destination, date} = req.body;
@@ -391,5 +400,14 @@ journeyController.getID = (req, res, next) => {
     selectID();
 }
  */
+
+// NEV: This one is to format the date yyyy-mm-dd, is used in updated entry
+const formatDate = (date) => {
+    let d = new Date(date);
+    let month = (d.getMonth() + 1).toString().padStart(2, '0');
+    let day = d.getDate().toString().padStart(2, '0');
+    let year = d.getFullYear()+21;
+    return [year, month, day].join('-');
+  }
 
 module.exports = journeyController;
