@@ -86,6 +86,7 @@ userController.loginUser = (req, res, next) => {
 userController.userJourneys = async (req, res, next) => {
     const userID = res.locals.userData.id;
     console.log("User ID: ",userID)
+<<<<<<< HEAD
     try {
         const response = await db.query(
             `SELECT j."id", j."origin", j."destination", j."date" FROM "userJourney" uj
@@ -99,6 +100,24 @@ userController.userJourneys = async (req, res, next) => {
     catch(err) {
         return next(err);
     }
+=======
+
+    async function userJourneys() {
+        try {
+            // NEV: To show journey status in profile, we should send "completed" status to the frontend which will be stored in States, upcomingjourneys
+                const response = await db.query(`SELECT j."id", j."origin", j."destination", j."date", j."completed" FROM "userJourney" uj
+                LEFT JOIN "journey" j ON j."id"="journeyID"
+                WHERE uj."userID"=${userID}`);
+                const journeys = await response.rows;
+                res.locals.allJourneys = journeys
+                return next();
+            }
+            catch(err) {
+                console.log("Error fetching journeys...");
+            }
+        }
+        userJourneys();
+>>>>>>> e1990bbcbe5935eb64ba3e4034d574310f647950
 }
 
 module.exports = userController;
