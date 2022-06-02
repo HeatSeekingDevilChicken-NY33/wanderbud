@@ -25,7 +25,7 @@ const SearchTest = () => {
 
     const onSearch = e => {
         const {name, value, checked} = e.target;
-         console.log('onSearch', e.target.checked)
+
 
         setValues({
             ...values,
@@ -80,11 +80,11 @@ const SearchTest = () => {
                     } else if (select === "create"){
                         const createJourney = await axios.post('http://localhost:3000/journey/create', {origin, destination, date, driver: driverValue, user_id});
                         console.log('post journey', createJourney.data);
-
                         if(createJourney.data){
-
-                            dispatch(fetchJourney(createJourney.data));
-                            dispatch(userJourney(createJourney.data));
+                            
+                            const findJourney = await axios.post('http://localhost:3000/journey/find', {origin, destination, date})
+                            dispatch(fetchJourney(findJourney.data));
+                            dispatch(userJourney(findJourney.data));
                         }
                     }
 
@@ -144,7 +144,7 @@ const SearchTest = () => {
                   onChange={onSearch}
                 />
             </div>
-            <div className="search-inputs">
+            {/* <div className="search-inputs">
                 <label htmlFor="driver" className="search-label">Driver</label>
                 <input
                   id="driver"
@@ -154,7 +154,7 @@ const SearchTest = () => {
                   value={values.driver}
                   onChange={onSearch}
                 />
-            </div>
+            </div> */}
             <div className="search-select">
                 <select 
                     className="select"

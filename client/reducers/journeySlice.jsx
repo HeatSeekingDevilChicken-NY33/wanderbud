@@ -42,11 +42,14 @@ export const journeySlice = createSlice({
     },
 
     deleteJourneyDispatch: (state, action) => {
+      console.log("HERE IS THE ACTION",action);
       const deleteJourneys = state.journeys.filter(
         (el, i) => i != action.payload
       );
       state.journeys = deleteJourneys;
-      console.log("Delete a journey", state.journeys[0]);
+      // console.log("Delete a journey", state.journeys.journeys[0]);
+      console.log("Upcoming Journeys", state.journeys.upcomingJourneys);
+      console.log("HERE IS DELETE JOURNEY",deleteJourneys);
     },
   },
 });
