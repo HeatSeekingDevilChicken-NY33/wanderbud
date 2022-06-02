@@ -6,6 +6,5 @@ export default configureStore({
     reducer: {
         users: userSlice,
         journeys: journeySlice
-        
     }
 })

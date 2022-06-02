@@ -1,4 +1,5 @@
 //merge dev
+// new comment
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,8 +25,12 @@ const SearchTest = () => {
 
     const onSearch = e => {
         const {name, value, checked} = e.target;
+<<<<<<< HEAD
         //  console.log('onSearch', e.target.checked)
         console.log(value);
+=======
+         console.log('onSearch', e.target.checked)
+>>>>>>> e1990bbcbe5935eb64ba3e4034d574310f647950
 
         setValues({
             ...values,
@@ -68,10 +73,13 @@ const SearchTest = () => {
                 try {
                     if (select === "find"){
                         (console.log('inside find', {origin, destination, date}))
+                        // It should be a get request, why is it post?
                         const findJourney = await axios.post('http://localhost:3000/journey/find', {origin, destination, date})
-                        console.log(findJourney.data);
+                        console.log("THE DATA WE GOT FROM BACKEND ",findJourney.data);
 
                         if(findJourney.data){
+                            // findJourneydata doesnt include journey status, check backend
+                            // getEntry from backend is revised, now sending completion status as 0 or 1 
                             dispatch(fetchJourney(findJourney.data));
                         }
                     } else if (select === "create"){
@@ -79,7 +87,8 @@ const SearchTest = () => {
                         console.log('post journey', createJourney.data);
 
                         if(createJourney.data){
-                            dispatch(fetchJourney(createJourney.data))
+
+                            dispatch(fetchJourney(createJourney.data));
                             dispatch(userJourney(createJourney.data));
                         }
                     }

@@ -12,7 +12,7 @@ const Journey = ({journey, index}) => {
     const dispatch = useDispatch();
     const user_id = useSelector(selectUserId);
 
-    const { origin, destination, date, creator, distance, cost, journey_id} = journey;
+    const { origin, destination, date, creator, distance, journey_id, completed, duration, totalCost} = journey;
     const { firstName } = creator;
     
 
@@ -56,7 +56,7 @@ const Journey = ({journey, index}) => {
             const join = async () => {
                 try {
                     const joinData = await axios.post('http://localhost:3000/journey/join', joinObj);
-                    console.log('joinData', joinData.data);
+                    console.log('joinData', joinData);
                     //dispatch addUser to send the data payload with generated id to redux store
 
     
@@ -123,8 +123,14 @@ const Journey = ({journey, index}) => {
                         <p className="journey-trait-label" >Date:</p>
                         <p className="journey-trait" >{date}</p>
                     </div>
+
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >Journey Status:</p>
+                        {completed === "1" ? <p className="journey-trait" >Completed</p> : <p className="journey-trait" >Upcoming</p> }
+                    </div>
+                    {/* NEV: Another conditional added here to check completion status, so there is no join button for the past journeys anymore */}
                     <div className="join-btn">
-                        {creator.user_id === user_id? <button className="deleteButton" onClick={handleDelete}>X</button>: <button className="joinButton" onClick={handleClick}>{toggle? "Join" : "Unjoin"}</button>}
+                        {creator.user_id === user_id? <button className="deleteButton" onClick={handleDelete}>X</button> : completed=== "0" ? <button className="joinButton" onClick={handleClick}>{toggle? "Join" : "Unjoin"}</button> : <p></p> }
                     </div>
                 
 
@@ -136,6 +142,20 @@ const Journey = ({journey, index}) => {
                         <p className="journey-trait" >{firstName}</p>
                     </div>
 
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >Distance in KM</p>
+                        <p className="journey-trait" >{distance}</p>
+                    </div>
+
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >Duration in hrs:</p>
+                        <p className="journey-trait" >{duration}</p>
+                    </div>
+
+                    <div className="journey-label">
+                        <p className="journey-trait-label" >Cost per trip $:</p>
+                        <p className="journey-trait" >{totalCost}</p>
+                    </div>
                     {/* <div className="journey-label">
                         <p className="journey-trait-label" >Distance:</p>
                         <p className="journey-trait" >{distance}</p>
