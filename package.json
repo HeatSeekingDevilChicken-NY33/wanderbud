@@ -12,7 +12,7 @@
     "server-only": "nodemon ./server/server.js",
     "test-server": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot\" \"nodemon ./server/test-server.js\"",
     "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot\" \"nodemon ./server/server.js\"",
-    "dev-test": "concurrently \"export NODE_ENV=\"test\"\" \"webpack-dev-server --open --hot\" \"nodemon ./server/server.js\"",
+    "dev-test": "export NODE_ENV=\"test\" & concurrently \"webpack-dev-server --open --hot\" \"nodemon ./server/server.js\"",
     "test": "cross-env NODE_ENV=test jest --verbose"
   },
   "repository": {
