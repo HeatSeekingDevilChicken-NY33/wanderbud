@@ -25,7 +25,12 @@ const SearchTest = () => {
 
     const onSearch = e => {
         const {name, value, checked} = e.target;
+<<<<<<< HEAD
+        //  console.log('onSearch', e.target.checked)
+        console.log(value);
+=======
          console.log('onSearch', e.target.checked)
+>>>>>>> e1990bbcbe5935eb64ba3e4034d574310f647950
 
         setValues({
             ...values,

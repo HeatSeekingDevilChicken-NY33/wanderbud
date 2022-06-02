@@ -20,7 +20,7 @@ router.post('/join', journeyController.join, journeyController.createUserJourney
 
 // Passenger Removes themselves from a journey
 router.delete('/join', journeyController.unjoin, (req, res) => {
-    res.status(200);
+    res.sendStatus(200);
 }); 
 
 /* // Update after a journey is completed
