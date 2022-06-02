@@ -323,7 +323,8 @@ select {
 .bottomPart{
     display: flex;
     flex-flow: row;
-    flex: 1 0 17%;
+    justify-content: space-around;
+    flex: 1 0 40%;
     // justify-content: space-around;
  .journey-label{
      margin-left: 18px;

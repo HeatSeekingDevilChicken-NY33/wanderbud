@@ -6,7 +6,7 @@ import Landing from "./containers/Landing";
 import Login from "./containers/Login";
 import Journey from "./containers/Journey";
 import Profile from "./containers/Profile";
-import Wanderbud from "./media/wanderbud-logo.png"
+import Wanderbud from "./media/wanderbud-logo.png";
 
 
 import { selectFirstname } from './reducers/userSlice';

@@ -46,7 +46,7 @@ journeyController.createJourney = async (req, res, next) => {
     duration = Math.floor(parseInt(googleMatrixData.rows[0].elements[0].duration.value)/3600);
     console.log(duration, distance, 'duration and distance')
     // Ask Nevruz what the cost calculation is
-    let totalCost = Math.floor(distance*0.20);
+    let totalCost = Math.floor(distance*0.20)/4;
 
     const query = `INSERT INTO "journey" ("origin", "destination", "date", "distance", "duration", "totalCost") VALUES ('${origin}', '${destination}', '${date}', ${distance},${duration}, ${totalCost})`
     db.query(query)
@@ -214,22 +214,35 @@ journeyController.join = (req, res, next) => {
     // console.log(req.body)
     async function userJourney() {
         try {
+          const response = await db.query(`SELECT COUNT ("userID") FROM "userJourney" WHERE "journeyID" = ${journeyID} AND "userID" = ${userID}`)
+          const userCount = parseInt(await response.rows[0].count);
+          if (userCount > 0) next(err)
 
-                // const response = await db.query(`SELECT * FROM "journey" WHERE "id"=${journeyID}`);
-                // const joinedJourney = await response.rows[0];
-                const response = await db.query(`SELECT COUNT ("userID") FROM "userJourney" WHERE "journeyID" = ${journeyID} AND "userID" = ${userID}`)
-                const joinedJourney = parseInt(await response.rows[0].count);
-                console.log(joinedJourney, 'this is joinedJourney')
-                if (joinedJourney === 0){
-                  console.log(response, 'we are in journeyController, this is resposne from query');
+          else {
+            const response = await db.query(`SELECT * FROM "journey" WHERE "id"=${journeyID}`);
+            const joinedJourney = await response.rows[0];
+            console.log(response, 'we are in journeyController, this is resposne from query');
                   res.locals.sendUserID = userID;
                   res.locals.journeyID = journeyID;
                   res.locals.join = {...joinedJourney, date: joinedJourney.date.toString().slice(0, 10)}
                   return next();
-                } else {
-                    return next(err);
-                }
+          }
 
+                // // const response = await db.query(`SELECT * FROM "journey" WHERE "id"=${journeyID}`);
+                // // const joinedJourney = await response.rows[0];
+                // const response = await db.query(`SELECT COUNT ("userID") FROM "userJourney" WHERE "journeyID" = ${journeyID} AND "userID" = ${userID}`)
+                // const joinedJourney = parseInt(await response.rows[0].count);
+                // console.log(joinedJourney, 'this is joinedJourney')
+                // if (joinedJourney === 0){
+                //   console.log(response, 'we are in journeyController, this is resposne from query');
+                //   res.locals.sendUserID = userID;
+                //   res.locals.journeyID = journeyID;
+                //   res.locals.join = {...joinedJourney, date: joinedJourney.date.toString().slice(0, 10)}
+                //   return next();
+
+                // } else {
+                //     return next(err);
+                // }
             }
             catch(err) {
                 console.log("Error in creating/joining userJourney instance...");
@@ -248,6 +261,7 @@ journeyController.unjoin = (req, res, next) => {
     let query = `DELETE FROM "userJourney" WHERE "userID"=${userID} AND "journeyID"=${journeyID}`
     db.query(query)
     .then(res => {
+        console.log('Deleted: ', res.rows);
        return next();
     })
     .catch(err => {

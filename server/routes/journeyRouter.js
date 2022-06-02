@@ -1,6 +1,7 @@
 const express = require('express');
 const journeyController = require('../controllers/journeyController');
 const router = express.Router();
+const userController = require('../controllers/userController');
 
 // Driver Creates a Journey
 router.post('/create', journeyController.createJourney, journeyController.getJourneyID,
@@ -30,9 +31,14 @@ journeyController.totalPeople, journeyController.updateUserJourney, (req, res) =
 }); */
 
 // Driver deletes a Journey
-router.delete('/', journeyController.unjoin, journeyController.deleteEntry, 
-journeyController.getJourney, (req, res) => {
+// router.delete('/', journeyController.unjoin, journeyController.deleteEntry, 
+// journeyController.getJourney, (req, res) => {
+//     res.status(200).json(res.locals.delete);
+// }); 
+
+router.delete('/', journeyController.unjoin, journeyController.deleteEntry, (req, res) => {
     res.status(200).json(res.locals.delete);
 }); 
 
 module.exports = router;
+
