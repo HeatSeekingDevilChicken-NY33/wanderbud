@@ -214,13 +214,22 @@ journeyController.join = (req, res, next) => {
     // console.log(req.body)
     async function userJourney() {
         try {
-                const response = await db.query(`SELECT * FROM "journey" WHERE "id"=${journeyID}`);
-                const joinedJourney = await response.rows[0];
-                console.log(response, 'we are in journeyController');
-                res.locals.sendUserID = userID;
-                res.locals.journeyID = journeyID;
-                res.locals.join = {...joinedJourney, date: joinedJourney.date.toString().slice(0, 10)}
-                return next();
+
+                // const response = await db.query(`SELECT * FROM "journey" WHERE "id"=${journeyID}`);
+                // const joinedJourney = await response.rows[0];
+                const response = await db.query(`SELECT COUNT ("userID") FROM "userJourney" WHERE "journeyID" = ${journeyID} AND "userID" = ${userID}`)
+                const joinedJourney = parseInt(await response.rows[0].count);
+                console.log(joinedJourney, 'this is joinedJourney')
+                if (joinedJourney === 0){
+                  console.log(response, 'we are in journeyController, this is resposne from query');
+                  res.locals.sendUserID = userID;
+                  res.locals.journeyID = journeyID;
+                  res.locals.join = {...joinedJourney, date: joinedJourney.date.toString().slice(0, 10)}
+                  return next();
+                } else {
+                    return next(err);
+                }
+
             }
             catch(err) {
                 console.log("Error in creating/joining userJourney instance...");

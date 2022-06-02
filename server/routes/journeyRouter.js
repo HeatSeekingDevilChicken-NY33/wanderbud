@@ -30,7 +30,8 @@ journeyController.totalPeople, journeyController.updateUserJourney, (req, res) =
 }); */
 
 // Driver deletes a Journey
-router.delete('/', journeyController.unjoin, journeyController.deleteEntry, (req, res) => {
+router.delete('/', journeyController.unjoin, journeyController.deleteEntry, 
+journeyController.getJourney, (req, res) => {
     res.status(200).json(res.locals.delete);
 }); 
 

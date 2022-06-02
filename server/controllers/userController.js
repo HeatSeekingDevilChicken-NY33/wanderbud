@@ -86,21 +86,6 @@ userController.loginUser = (req, res, next) => {
 userController.userJourneys = async (req, res, next) => {
     const userID = res.locals.userData.id;
     console.log("User ID: ",userID)
-<<<<<<< HEAD
-    try {
-        const response = await db.query(
-            `SELECT j."id", j."origin", j."destination", j."date" FROM "userJourney" uj
-            LEFT JOIN "journey" j ON j."id"="journeyID"
-            WHERE uj."userID"=${userID}`
-        );
-        const journeys = response.rows;
-        res.locals.allJourneys = journeys
-        return next();
-    }
-    catch(err) {
-        return next(err);
-    }
-=======
 
     async function userJourneys() {
         try {
@@ -118,7 +103,6 @@ userController.userJourneys = async (req, res, next) => {
             }
         }
         userJourneys();
->>>>>>> e1990bbcbe5935eb64ba3e4034d574310f647950
 }
 
 module.exports = userController;
