@@ -52,6 +52,45 @@ describe('database backend function test', () => {
         await db.query(createUserJourneyTableQuery);
     });
 
+    /*
+    afterAll(async () => {
+        
+        // const dropAllTables = `
+        //     DROP TABLE IF EXISTS "userJourney";
+        //     DROP TABLE IF EXISTS "journey";
+        //     DROP TABLE IF EXISTS "user";
+        // `;
+        
+        // await db.query(dropAllTables);
+    });
+    */
+
+/*
+Test for: CREATE, READ, UPDATE, DELETE
+JourneyController
+CREATE: 
+journeyController.createJourney(req, res, next);
+    > {origin, destination, date} = req.body
+    > input: req.body object
+    > expect: journey to be created with SELECT statement to created parameters
+
+READ: 
+journeyController.getJourneyID = (req, res, next)
+    > {origin, destination, date} = req.body;
+    > input: req.body object
+    > expect: journey ID = 1, since we created one record
+    > can invoke create another record to test & expect journey ID = 2
+
+    test db - postgres://bbrlxsgj:be9gmTE2pA7YM7DHk1LJoCq1DsEmELY_@castor.db.elephantsql.com/bbrlxsgj
+*/
+     /*
+    userController
+
+    CREATE:
+    userController.signupUser = (req, res, next)
+        > 
+        > 
+    */
     describe('db user tests', () => {
 
         // route: '/signup/users'
@@ -169,7 +208,7 @@ describe('database backend function test', () => {
                 expect(response.status).toEqual(200);
             });
         });
-        
+
         // router.delete('/') passenger deletes an entire journey from db journey
         describe('delete /journey/', () => {
             it('should delete a journey from the database', async () => {
@@ -186,6 +225,13 @@ describe('database backend function test', () => {
             });
         });
     });
+    /*
+    journey routes:
+    /prepended with /journey
+
+    
+    */ 
+
 });
 
 
