@@ -34,6 +34,7 @@ describe('database backend function test', () => {
             "destination" VARCHAR(255),
             "date" VARCHAR(255),
             "distance" INT,
+            "duration" VARCHAR(255),
             "totalCost" INT,
             "completed" INT
         );
