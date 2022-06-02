@@ -75,7 +75,7 @@ const SearchTest = () => {
                         (console.log('inside find', {origin, destination, date}))
                         // It should be a get request, why is it post?
                         const findJourney = await axios.post('http://localhost:3000/journey/find', {origin, destination, date})
-                        console.log(findJourney.data);
+                        console.log("THE DATA WE GOT FROM BACKEND ",findJourney.data);
 
                         if(findJourney.data){
                             // findJourneydata doesnt include journey status, check backend
