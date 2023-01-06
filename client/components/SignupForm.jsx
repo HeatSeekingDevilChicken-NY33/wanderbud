@@ -52,8 +52,6 @@ const SignupForm = () => {
                         const sendData = await axios.post('http://localhost:3000/signup/users', values);
                         //dispatch addUser to send the data payload with generated id to redux store
 
-        
-                        /* NEED TO CHANGE !!!!!!!! have backend send status, if user already exists in database, have signup error status be true and do not navigate to posts*/
                         if (sendData.data) {
                             console.log("HERE IS THE SEND DATA ===>",sendData)
                             dispatch(addUser(sendData.data));
@@ -63,7 +61,6 @@ const SignupForm = () => {
                         setError(true);
                         console.log('error', err);
                     }
-                    //send post request to database to register user
                     
                 }
     

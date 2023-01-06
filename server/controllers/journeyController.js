@@ -9,18 +9,13 @@ require("dotenv").config();
 const journeyController = {};
 
 // Creates a Journey
-// Recieves origin, destination, date, driver, userID from Front End
 journeyController.createJourney = async (req, res, next) => {
 
     console.log(req.body, "I am in create Journey")
 
     const {origin, destination, date} = req.body;
 
-    // Google Distance Matrix API 
-    // const key = 'AIzaSyDgXLhVIg_TDDUUErCbcLwJ7pMZ3xVgLAA'
     const key = `${process.env.GEO_KEY}`
-    // APIKEY = AIzaSyDgXLhVIg_TDDUUErCbcLwJ7pMZ3xVgLAA
-    // const geoCodeAPIKey = 'AtiFx_hgNNhk68ply-K4aW3CeHA='
     const geoCodeAPIKey = `${process.env.GEO_KEY_API}=`
     const originURIComponent = encodeURIComponent(origin);
     const destinationURIComponent = encodeURIComponent(destination);
@@ -37,7 +32,6 @@ journeyController.createJourney = async (req, res, next) => {
     // Google Distance Matrix API finds the distance if it is drivable
     await axios(config)
     .then(response =>  {
-      // console.log(JSON.stringify(response.data));
       googleMatrixData = response.data
     })
     .catch( ()=>  {
@@ -45,11 +39,10 @@ journeyController.createJourney = async (req, res, next) => {
     });
 
     console.log("HERE IS THE GOOGLEMATRIX DATA",googleMatrixData)
-    // distance and duration are in meters and seconds, convert in the front end
+    // distance and duration are in meters and seconds, needs to be converted
     distance = parseInt((googleMatrixData.rows[0].elements[0].distance.value)/1000);
     duration = Math.floor(parseInt(googleMatrixData.rows[0].elements[0].duration.value)/3600);
-    console.log(duration, distance, 'duration and distance')
-    // Ask Nevruz what the cost calculation is
+    // General assumption for the cost per km
     let totalCost = Math.floor(distance*0.20)/4;
 
     const query = `INSERT INTO "journey" (origin, destination, date, distance, duration, totalCost, completed) VALUES ('${origin}', '${destination}', '${date}', ${distance},${duration}, ${totalCost}, '0')`
@@ -93,7 +86,7 @@ journeyController.createUserJourney = (req, res, next) => {
     const journey_id = res.locals.journeyID
     console.log(driver,user_id, journey_id);
 
-    // create a instance in userJourney table: userID, journeyID, cost=0, driver 
+    // create a instance in userJourney table: userID, journeyID, driver 
     if (driver === true && user_id != undefined) {
         const query = `INSERT INTO "userJourney" (userID,journeyID,driver) VALUES (${user_id},${journey_id},'${driver}');`
         db.query(query)
@@ -138,16 +131,12 @@ journeyController.getfirstName = (req, res, next) => {
 // journeyID, origin, destination, date, creatorObject {userID, firstName}, distance
 journeyController.getJourney = (req, res, next) => {
     const {origin, destination, date, user_id} = req.body;
-    // console.log("First Name here too!",res.locals.firstN)
     
     async function getJourney() {
         try {
             const response = await db.query(`SELECT * FROM "journey" WHERE "origin"='${origin}' AND "destination"='${destination}' AND "date"='${date}'`)
             foundJourney = await response.rows;
             let creator = {user_id:user_id, firstName:res.locals.firstN}
-            console.log("HERE IS RES LOCALS ==>",res.locals);
-            // console.log(foundJourney[0].duration, "DURATION")
-            // console.log(foundJourney[0].totalcost, "TOTAL COST")
             let journey = {
               'journey_id':foundJourney[0]._id,
               'origin':foundJourney[0].origin,
@@ -158,9 +147,7 @@ journeyController.getJourney = (req, res, next) => {
               'duration':foundJourney[0].duration,
               'totalCost':foundJourney[0].totalcost
             }
-            console.log([journey], 'awwww its journey')
             let result = [journey]
-            console.log(result, 'ITs RESULT!!!!!!');
             res.locals.journey = result
             return next();
         }
@@ -176,7 +163,6 @@ journeyController.getJourney = (req, res, next) => {
 // array of objects, each object includes: journeyID, origin, destination, date, distance
 journeyController.getEntry = (req, res, next) => {
     const {origin, destination, date} = req.body;
-    // console.log('request items', origin)
     async function getJourney() {
         try {
             const response = await db.query(`
@@ -200,10 +186,7 @@ journeyController.getEntry = (req, res, next) => {
                     let journey = {'journey_id':foundJourney[i]._id, 'origin':foundJourney[i].origin, 'destination':foundJourney[i].destination, 
                     'date':foundJourney[i].date.toString().slice(0, 10), 'creator':creator, 'distance':foundJourney[i].distance, 'duration':foundJourney[i].duration, 'totalCost':foundJourney[i].totalcost, 'completed':foundJourney[i].completed }
                     result.push(journey)
-
-                    // 'duration':foundJourney[i].duration, 
             }
-            console.log(result)
             res.locals.journey = result;
             return next();
         }
@@ -219,7 +202,6 @@ journeyController.getEntry = (req, res, next) => {
 journeyController.join = (req, res, next) => {
 
     const {userID, journeyID} = req.body;
-    // console.log(req.body)
     async function userJourney() {
         try {
           const response = await db.query(`SELECT COUNT (userID) FROM "userJourney" WHERE journeyID = ${journeyID} AND userID = ${userID}`)
@@ -235,22 +217,6 @@ journeyController.join = (req, res, next) => {
                   res.locals.join = {...joinedJourney, date: joinedJourney.date.toString().slice(0, 10)}
                   return next();
           }
-
-                // // const response = await db.query(`SELECT * FROM "journey" WHERE "id"=${journeyID}`);
-                // // const joinedJourney = await response.rows[0];
-                // const response = await db.query(`SELECT COUNT ("userID") FROM "userJourney" WHERE "journeyID" = ${journeyID} AND "userID" = ${userID}`)
-                // const joinedJourney = parseInt(await response.rows[0].count);
-                // console.log(joinedJourney, 'this is joinedJourney')
-                // if (joinedJourney === 0){
-                //   console.log(response, 'we are in journeyController, this is resposne from query');
-                //   res.locals.sendUserID = userID;
-                //   res.locals.journeyID = journeyID;
-                //   res.locals.join = {...joinedJourney, date: joinedJourney.date.toString().slice(0, 10)}
-                //   return next();
-
-                // } else {
-                //     return next(err);
-                // }
             }
             catch(err) {
                 console.log("Error in creating/joining userJourney instance...");
@@ -263,9 +229,6 @@ journeyController.join = (req, res, next) => {
 // remove passenger/driver from userJourney with journeyID and userID
 journeyController.unjoin = (req, res, next) => {
     const {userID, journeyID} = req.body.joinObj;
-    // const {userID, journeyID} = req.query;
-    // console.log(req.query);
-    console.log("REQ BODY FOR UNJOIN OPERATION ===>",req.body);
     let query = `DELETE FROM "userJourney" WHERE userID='${userID}' AND journeyID='${journeyID}'`
     db.query(query)
     .then(res => {
@@ -290,16 +253,11 @@ journeyController.deleteEntry = (req, res, next) => {
     .catch(err => {
         console.log("Error can't delete journey..");
     }) 
-}
- // NEV: This part is revised, based on date, it will update the completion status of journeys. 
+} 
 
  // Update after a journey is completed
-// NEED TO calculate distance, calculate totalCost after completing a journey
 journeyController.updateEntry = (req, res, next) => {
     const {origin, destination, date} = req.body
-    // let query = `UPDATE Journey
-    // SET "distance" = 50, "totalCost" = 600, "completed"='1'
-    // WHERE "origin"='${origin}' AND "destination"='${destination}' AND "date"='${date}';`
     console.log('JOURNEY STATUS IS UPDATED!')
     let query = `UPDATE JOURNEY
     SET "completed" = '1'

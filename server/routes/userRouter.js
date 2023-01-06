@@ -9,13 +9,6 @@ router.post('/signup/users',
         res.status(200).json(res.locals.userData);
     });
 
-// Log in a user (then authenticate: stretch feature) 
-// router.post('/login', 
-//     userController.loginUser, 
-//     (req, res) => {
-//         res.status(200).json(res.locals.userData);
-//     });
-
 router.post('/login', 
 userController.loginUser, userController.userJourneys,
 (req, res) => {

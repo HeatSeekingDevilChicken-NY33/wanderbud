@@ -5,11 +5,9 @@ import LandingDisplay from '../components/LandingDisplay'
 
 
 const Landing = () => {
-  
 
   return (
     <div className="Landing">
-        {/* <h1> Hello </h1> */}
         <LandingDisplay />
         
     </div>

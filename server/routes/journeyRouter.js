@@ -24,18 +24,6 @@ router.delete('/join', journeyController.unjoin, (req, res) => {
     res.sendStatus(200);
 }); 
 
-/* // Update after a journey is completed
-router.patch('/', journeyController.updateEntry, journeyController.getUpdatedJourneyID, 
-journeyController.totalPeople, journeyController.updateUserJourney, (req, res) => {
-    res.status(200).json(res.locals.updated);
-}); */
-
-// Driver deletes a Journey
-// router.delete('/', journeyController.unjoin, journeyController.deleteEntry, 
-// journeyController.getJourney, (req, res) => {
-//     res.status(200).json(res.locals.delete);
-// }); 
-
 router.delete('/', journeyController.unjoin, journeyController.deleteEntry, (req, res) => {
     res.status(200).json(res.locals.delete);
 }); 

@@ -29,14 +29,12 @@ const Journey = ({journey, index}) => {
         const deleteJourney = async() => { 
             try {
                 const deleteData = await axios.delete('http://localhost:3000/journey', {data:{joinObj}});
-                console.log('delete response', deleteData)
             }
             catch (err) {
                 setError(true);
             }
         }
         deleteJourney();
-        console.log("TO BE DELETED journeyID ===>",joinObj.journeyID)
         dispatch(deleteJourneyDispatch(index));
     }
 
@@ -44,7 +42,7 @@ const Journey = ({journey, index}) => {
     const handleClick = e => {
         setToggle(!toggle);
         console.log(toggle);
-        // e.preventDefault();
+        e.preventDefault();
         const { userID, journeyID } = joinObj;
         //checks for input fields being defined
         if (!userID || !journeyID){
@@ -56,11 +54,7 @@ const Journey = ({journey, index}) => {
             const join = async () => {
                 try {
                     const joinData = await axios.post('http://localhost:3000/journey/join', joinObj);
-                    console.log('joinData', joinData);
                     //dispatch addUser to send the data payload with generated id to redux store
-
-    
-                    /* NEED TO CHANGE !!!!!!!! have backend send status, if user already exists in database, have signup error status be true and do not navigate to posts*/
                     if (joinData.data) {
                         dispatch(joinJourney(joinData.data));
                         console.log('Join Successful')
@@ -69,34 +63,22 @@ const Journey = ({journey, index}) => {
                     setError(true);
                     console.log('error', err);
                 }
-                //send post request to database to register user
-                
             }
-
             join();
 
         } else if (toggle === false) {
             const unjoin = async () => {
                 try {
                     const unjoinData = await axios.delete('http://localhost:3000/journey/join', {data:{joinObj}});
-                    console.log('unjoinData', unjoinData.data);
                     //dispatch addUser to send the data payload with generated id to redux store
-
-    
                     dispatch(unjoinJourney(journeyID));
-                    // if (unjoinData.data) {
-                    //     dispatch(deleteUser(unjoinData.data));
                     console.log('Unjoin Successful')
-                    // }
 
                 } catch (err) {
                     setError(true);
                     console.log('error', err);
                 }
-                //send post request to database to register user
-                
             }
-
             unjoin();
         }
     }

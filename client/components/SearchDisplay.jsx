@@ -15,7 +15,6 @@ const App = () => {
     date: "",
     driver: "",
   };
-  // We need 2 hooks, one for origin,destination,date. The other is for checkbox to determine is it driver or passenger
   const [info, setInfo] = useState(initialState);
   const [isChecked, setIsChecked] = useState(false);
 

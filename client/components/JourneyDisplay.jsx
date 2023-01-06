@@ -11,9 +11,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 const JourneyDisplay = () => {
 
-    // const posts = useSelector(selectPosts);
-
-    // const [renderJourneys, setRenderJourneys] = useState([]);
     const journeys = useSelector(selectJourney);
     console.log('in journey', journeys);
     const renderJourneys = journeys.map((journey, index) => {

@@ -5,27 +5,16 @@ export const userSlice = createSlice({
   name: 'user',
   //define initial state
   initialState: {
-    users: {}, //should be array or object?
+    users: {},
     id: null,
     age:'',
     email:'',
     firstName: '',
     lastName: ''
-    //{id1 : {user info}, id2: {user info}}
   },
   
   //reducer functions
   reducers: {
-    // populateUsers: (state, action) => {
-    //   state.users = action.payload;
-
-    // },
-    // fetchUsers: (state, action) => {
-    //   action.payload.map((el)=> state.users[el.id] = el);
-      
-    // },
-
-    //SIGNUP USER REDUCER FUNCTION - 1st thing to be done!
 
     addUser: (state, action) => {
       const { age, email, _id, firstname, lastname} = action.payload;

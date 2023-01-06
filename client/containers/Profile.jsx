@@ -11,8 +11,6 @@ const Profile = () => {
     const upcomingJourneys = useSelector(selectUpcomingJourneys);
     const allJourneys = [...upcomingJourneys];
     
-    // let prev = journeys.length;
-    // const [temp, setTemp] = useState(prev);
 
     console.log('allJourneys', allJourneys);
     const userJourneys = allJourneys.sort(el=> el.date).map(el => {
@@ -44,7 +42,6 @@ const Profile = () => {
                         {completed === "1" ? <p className="journey-trait" >Completed</p> : <p className="journey-trait" >Upcoming</p> }
                     </div>
 
-                    {/* Additional Feature, distance from API will be added to the profile page here  */}
                     <div className="journey-label">
                         <p className="journey-trait-label" >Distance in KM:</p>
                         <p className="journey-trait" >{distance}</p>

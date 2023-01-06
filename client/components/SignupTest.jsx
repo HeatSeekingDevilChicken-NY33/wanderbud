@@ -9,11 +9,7 @@ const SignupTest = () => {
     const { values, onSignup, error, handleSubmit } = useSignup();
 
     return (
-        // <form className="login-form">
-        //     <input type="text" name="email" value={userEmail} onChange={setUserEmail}/><br/>
-        //     {/* <input type="password" name="password" value={userPassword} onChange={setUserPassword}/><br/>
-        //     <button className="login-btn" onClick={handleLogin}>Login</button> */}
-        // </form>
+
         <div className="signup">
             {/* SIGNUP FORM */}
             <form className="signup-form" onSubmit={handleSubmit}>

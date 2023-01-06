@@ -33,11 +33,7 @@ if (process.env.NODE_ENV == 'production'){
 // catch-all route handler for any requests to an unknown route
 app.use((req, res) => res.status(404).send('Error: Page not found'));
 
-/**
- * express error handler
- * @see https://expressjs.com/en/guide/error-handling.html#writing-error-handlers
- */
-
+//Global error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
@@ -52,5 +48,3 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}...`);
 });
-
-// module.exports = app;

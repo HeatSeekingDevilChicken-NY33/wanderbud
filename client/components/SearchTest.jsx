@@ -33,30 +33,20 @@ const SearchTest = () => {
             driver: !checked
         })
         setError(false)
-    //  console.log(values);
     }
 
-    //don't fully understand why select needs to be separated but
-    //this is the only thing that works
     const onSelect = e => {
         const selected = e.target.value;
         setValues({
             ...values,
             select: selected
         })
-        // console.log('select me', selected);
-        // console.log('inside select', values)
     }
 
     const handleSubmit = e => {
         e.preventDefault();
         const { origin, destination, date, driver, select } = values;
         let driverValue = null;
-        // if (driver === true) {
-        //     driverValue = 1;
-        // } else {
-        //     driverValue = 0;
-        // }
 
         driverValue = driver === true? 1 : 0;
 
@@ -68,12 +58,9 @@ const SearchTest = () => {
                 try {
                     if (select === "find"){
                         (console.log('inside find', {origin, destination, date}))
-                        // It should be a get request, why is it post?
                         const findJourney = await axios.post('http://localhost:3000/journey/find', {origin, destination, date})
-                        console.log("THE DATA WE GOT FROM BACKEND ",findJourney.data);
 
                         if(findJourney.data){
-                            // findJourneydata doesnt include journey status, check backend
                             // getEntry from backend is revised, now sending completion status as 0 or 1 
                             dispatch(fetchJourney(findJourney.data));
                         }
