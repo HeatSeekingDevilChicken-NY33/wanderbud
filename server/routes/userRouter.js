@@ -4,7 +4,7 @@ const router = express.Router();
 
 // Create a new user (signup + login)
 router.post('/signup/users', 
-    userController.signupUser, 
+    userController.signupUser, userController.loginUser,
     (req, res) => {
         res.status(200).json(res.locals.userData);
     });

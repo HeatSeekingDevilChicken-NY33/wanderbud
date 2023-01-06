@@ -43,6 +43,7 @@ export const journeySlice = createSlice({
 
     deleteJourneyDispatch: (state, action) => {
       console.log("HERE IS THE ACTION",action);
+      console.log("HERE IS THE STATE ==>", state);
       const deleteJourneys = state.journeys.filter(
         (el, i) => i != action.payload
       );

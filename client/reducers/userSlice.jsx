@@ -28,12 +28,13 @@ export const userSlice = createSlice({
     //SIGNUP USER REDUCER FUNCTION - 1st thing to be done!
 
     addUser: (state, action) => {
-      const { age, email, id, firstName, lastName} = action.payload;
+      const { age, email, _id, firstname, lastname} = action.payload;
       state.age = age;
       state.email = email;
-      state.id = id;
-      state.firstName = firstName;
-      state.lastName = lastName;
+      state.id = _id;
+      state.firstName = firstname;
+      state.lastName = lastname;
+      console.log(action.payload)
       console.log('in addUser reducer state', state.firstName)
     },
 

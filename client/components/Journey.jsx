@@ -36,7 +36,7 @@ const Journey = ({journey, index}) => {
             }
         }
         deleteJourney();
-        console.log("hello")
+        console.log("TO BE DELETED journeyID ===>",joinObj.journeyID)
         dispatch(deleteJourneyDispatch(index));
     }
 
@@ -44,7 +44,7 @@ const Journey = ({journey, index}) => {
     const handleClick = e => {
         setToggle(!toggle);
         console.log(toggle);
-        e.preventDefault();
+        // e.preventDefault();
         const { userID, journeyID } = joinObj;
         //checks for input fields being defined
         if (!userID || !journeyID){

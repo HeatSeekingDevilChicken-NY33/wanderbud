@@ -55,6 +55,7 @@ const SignupForm = () => {
         
                         /* NEED TO CHANGE !!!!!!!! have backend send status, if user already exists in database, have signup error status be true and do not navigate to posts*/
                         if (sendData.data) {
+                            console.log("HERE IS THE SEND DATA ===>",sendData)
                             dispatch(addUser(sendData.data));
                             navigate("/journey");
                         }

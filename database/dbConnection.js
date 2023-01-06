@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+require("dotenv").config();
 
 // Local Database - Postgres
 // const credentials = {
@@ -11,15 +12,42 @@ const { Pool } = require('pg');
 // const pool = new Pool(credentials);
 
 // Remote Database - ElephantSQL
-let PG_URI = 'postgres://nopyulan:WKLiI-Qx46dvnkVPu-YRJjbKuBBi9oJp@fanny.db.elephantsql.com/nopyulan';
-console.log('environment variable ', process.env.NODE_ENV);
+let PG_URI = `${process.env.DB_STRING}`;
+console.log('environment variable ', `${process.env.NODE_ENV}`);
 if (process.env.NODE_ENV === 'test') {
   console.log('in test env');
-  PG_URI = 'postgres://bbrlxsgj:be9gmTE2pA7YM7DHk1LJoCq1DsEmELY_@castor.db.elephantsql.com/bbrlxsgj';
+  PG_URI = `${process.env.DB_STRING_TEST}`;
 }
-
-console.log(PG_URI);
-const pool = new Pool({connectionString: PG_URI});
+const userTable = `CREATE TABLE IF NOT EXISTS "user"(
+  _id SERIAL PRIMARY KEY,
+  firstName VARCHAR NOT NULL,
+  lastName VARCHAR NOT NULL,
+  age INTEGER NOT NULL,
+  email VARCHAR UNIQUE NOT NULL,
+  password VARCHAR NOT NULL
+  );`;
+const userJourney = `CREATE TABLE IF NOT EXISTS "userJourney"(
+  _id SERIAL PRIMARY KEY,
+  userID INTEGER NOT NULL,
+  journeyID INTEGER NOT NULL,
+  userStatus VARCHAR,
+  cost INTEGER,
+  driver BOOLEAN
+  );`
+const journey = `CREATE TABLE IF NOT EXISTS "journey"(
+  _id SERIAL PRIMARY KEY,
+  origin VARCHAR NOT NULL,
+  destination VARCHAR NOT NULL,
+  date DATE NOT NULL,
+  completed VARCHAR,
+  distance INTEGER,
+  duration INTEGER,
+  totalCost INTEGER
+  );`
+  const pool = new Pool({connectionString: PG_URI});
+  pool.query(userTable)
+  pool.query(userJourney);
+  pool.query(journey);
 
 module.exports = {
     query: (text, params, callback) => {

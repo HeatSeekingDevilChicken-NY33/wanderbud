@@ -11,7 +11,6 @@ userController.signupUser = (req, res, next) => {
 
     // Check For Any Missing Fields
     const {firstName, lastName, age, email, password} = req.body;
-    console.log(req.body);
     if (!firstName || !lastName || !age || !email || !password) {
         // res.status(400);
         // res.json({}); to send back to front end?
@@ -31,13 +30,16 @@ userController.signupUser = (req, res, next) => {
     }
 
     // Query - Insert New User Into Database
-    const text ='INSERT INTO "user" ("firstName", "lastName", "age", "email", "password") VALUES ($1, $2, $3, $4, $5) RETURNING "id", "firstName", "lastName", "age", "email";';
+    const text ='INSERT INTO "user" (firstName, lastName, age, email, password) VALUES ($1, $2, $3, $4, $5);';
     const values = [firstName, lastName, age, email, password];
 
     db.query(text, values)
         .then(response => {
             console.log('Inserted');
-            res.locals.userData = response.rows[0];
+            console.log("RESPONSE ==>",response.rows)
+            res.locals.userData = response.rows;
+            // NEV - Original
+            // res.locals.userData = response.rows[0];
             next();
         })
         .catch(err => {
@@ -65,7 +67,7 @@ userController.loginUser = (req, res, next) => {
           })
     }
 
-    const text = 'SELECT "id", "firstName", "lastName", "age", "email" FROM "user" WHERE "email"=$1 AND "password"=$2;';
+    const text = 'SELECT _id, firstName, lastName, age, email FROM "user" WHERE email=$1 AND password=$2;';
     const values = [email, password];
 
     db.query(text, values)
@@ -84,15 +86,18 @@ userController.loginUser = (req, res, next) => {
 
 //gets all of user's journeys
 userController.userJourneys = async (req, res, next) => {
-    const userID = res.locals.userData.id;
+    const userID = res.locals.userData._id;
+    console.log("RESPONSE ==>",res.locals);
     console.log("User ID: ",userID)
 
     async function userJourneys() {
         try {
             // NEV: To show journey status in profile, we should send "completed" status to the frontend which will be stored in States, upcomingjourneys
-                const response = await db.query(`SELECT j."id", j."origin", j."destination", j."date", j."completed", j."duration", j."distance", j."totalCost" FROM "userJourney" uj
-                LEFT JOIN "journey" j ON j."id"="journeyID"
-                WHERE uj."userID"=${userID}`);
+                // const response = await db.query(`SELECT j."id", j."origin", j."destination", j."date", j."completed", j."duration", j."distance", j."totalCost" FROM "userJourney" uj
+                // LEFT JOIN "journey" j ON j."id"="journeyID"
+                // WHERE uj."userID"=${userID}`);
+                const response = await db.query(`SELECT uj.userID,j._id, j.origin, j.destination, j.date, j.completed, j.duration, j.distance, j.totalCost 
+                FROM "userJourney" uj LEFT JOIN "journey" j ON j._id = uj.journeyID WHERE uj.userID = '${userID}'`);
                 const journeys = await response.rows;
                 console.log(journeys, "this is journeys!!!!!!")
                 res.locals.allJourneys = journeys
